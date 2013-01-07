@@ -19,7 +19,7 @@ else exit
 fi
 
 # Fetch all my tweets startin containing "LINK:"
-#$t_command search timeline "LINK:" -l -N --csv > $infile 
+$t_command search timeline "LINK:" -l -N --csv > $infile 
 
 # Create filter from 1st parameter 
 if [ "$#" -eq 0 ]; then
