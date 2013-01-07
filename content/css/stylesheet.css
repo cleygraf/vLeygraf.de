@@ -31,7 +31,7 @@
 	margin-left: 0em;
 	margin-right: 0em;
 	padding-left: 10px;
-	border-left: 2px solid #f74649;
+/*	border-left: 2px solid #f74649; */
 }
 
 .sidebar  ul {
@@ -49,6 +49,11 @@
  * Content
  *
  */
+
+#content {
+	border-right: 2px solid #f74649;
+	margin-bottom: 10px;
+}
 
 /*#content .section {
 	margin-left: 0em;
