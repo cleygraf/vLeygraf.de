@@ -137,3 +137,7 @@ p.blognavigation {
 .blogpost-last h1 {
 	font-size: 1.0em;
 }
+
+strong {
+	font-weight: bold;
+}
