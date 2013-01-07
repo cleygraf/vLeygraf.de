@@ -1,0 +1,8 @@
+---
+kind: article
+title: Automatische tmux-Sitzung
+created_at: 2012-05-22
+author: Christoph Leygraf
+---
+
+<p>Der Podcast von <a href="http://thechangelog.com/" target="_blank">The Changelog</a> hat mich durch <a href="http://thechangelog.com/post/17827235767/episode-0-7-3-tmux-with-brian-hogan-and-josh-clayton" target="_blank">Episode 0.7.3</a> auf den Geschmack von <a href="http://tmux.sourceforge.net/" target="_blank">tmux</a> gebracht.</p><p>Der Umstieg von <a href="http://www.gnu.org/software/screen/" target="_blank">screen</a> ist recht einfach: Die meisten Kommandos von <em>screen </em>werden von <code>CTRL-a</code> eingeleitet, bei <em>tmux</em> ist es <code>CTRL-b</code>. Ein neues Fenster unter <em>screen</em> öffne ich mit <code>CTRL-b c</code>, bei <em>tmux</em> ist es<span dir="ltr"> <code>CTRL-b c</code></span>.</p><p>Verbinde ich mich per <code>ssh</code> mit einem meiner Server, führe ich automatisch <code>screen -D -RR</code> aus, um eine bestehende <em>screen</em>-Sitzung zu übernehmen oder, wenn nötig, eine neue zu starten. Mit <em>tmux</em> ist das nicht so einfach, hier ist ein umfangreiches Kommando notwendig:</p><p style="margin-left: 40px; "><code>&nbsp;tmux has-session -t "$USER" || tmux new-session -s "$USER" &amp;&amp; tmux attach -t "$USER"</code></p><p>&nbsp;</p><p>Bei Interesse empfehle ich dieses <a href="http://www.youtube.com/watch?v=QxTse5Elq8s" target="_blank">Video bei YouTube</a>, &nbsp;Jon Jensen vergleicht <em>screen</em> und <em>tmux</em>.</p>

@@ -1,0 +1,21 @@
+--- 
+title: vLeygraf.de - Virtuelles und weniger Virtuelles
+---
+
+<% (@site.sorted_articles[0..0]).each do |post| %>
+	<div class='blogpost'>
+		<%= post.compiled_content(:snapshot => :body) %>
+	</div><!-- /.blogpost -->
+<% end %>
+<div class='archiv'>
+	<h1>Die neusten Beiträge:</h2>
+	<ul>
+		<% (@site.sorted_articles[1..4]).each do |post| %>
+			<div class='blogpost-last'>
+				<li><h1 class="title"><%= link_to(post[:title], post.path) %></h1>
+				<% if post[:created_at] && post[:author] %><h2 class="subtitle"><%= post[:created_at] %> | <%= post[:author] %></h2><% end %></li>
+				<!-- <%= get_post_start(post) %> -->
+			</div><!-- /.blogpost-last -->
+		<% end %>
+	</ul>
+</div><!-- /.archiv -->

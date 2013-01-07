@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8"/>
+		<% if @item[:title] %><title><%= @item[:title] %></title><% else %><title><%= item.identifier %></title><% end %>
+		<% for file in @config[:stylesheets] %><link rel="stylesheet" type="text/css" href="/css/<%= File.basename(file, ".*") %>.css"><% end %>
+		<link rel="shortcut icon" href="/files/favicon.ico">
+		<meta name="generator" content="nanoc <%= Nanoc::VERSION %>"/> 
+	</head>
+	<body class="page front logged-in one-sidebar sidebar-second">
+		<div id="page-wrapper"><div id="page">
+			<div id="header"><div class="section clearfix">
+				<a href="/" title="Startseite" rel="home" id="logo"><img src="/files/logo.jpg" alt="Startseite" /></a>
+              	<div id="name-and-slogan">
+                    <h1 id="site-name"><a href="/" title="Startseite" rel="home"><span>vLeygraf.de</span></a></h1>
+                    <div id="site-slogan">Virtuelles und weniger Virtuelles</div>
+                </div><!-- /#name-and-slogan -->
+        	</div></div><!-- /.section, /#header -->
+			<div id="main-wrapper"><div id="main">
+					<div id='content'><div class="section">
+						<%= yield %>
+					</div></div><!-- /.section, /#content -->
+					<div class="region region-sidebar-second column sidebar">
+						<%= render 'sidebar' %>
+					</div> <!-- /.region .region-sidebar-second .column .sidebar -->
+			</div></div><!-- /#main, /#main-wrapper -->
+		</div></div><!-- /#page, /#page-wrapper -->
+	</body>
+</html>

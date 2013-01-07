@@ -1,0 +1,8 @@
+---
+kind: article
+title: Zweiter SSH auf Port 23 mit xinetd
+created_at: 2010-10-17
+author: Christoph Leygraf
+---
+
+<p style="clear: both">Mein Router kann leider von drau&szlig;en nur die Ports eins zu eins umleiten, d. h. der SSH-Port (Port 22) kann an einen internen Rechner nur auf Port 22 umgeleitet werden. Was, wenn aber noch ein zweiter Rechner per SSH von drau&szlig;en erreichbar sein soll? Dann mu&szlig; ich einen anderen Port nehmen und diesen Port entsprechend auf dem Router umleiten. Ich habe mich f&uuml;r Port 23 (Telnet) entschieden, denn Telnet brauche ich eigentlich nie. Auf dem Zielrechner muss jetzt der SSH-Dienst auch auf Port 23 lauschen. Mir sind daf&uuml;r 3 M&ouml;glichkeiten eingefallen:<br /> 	&nbsp;</p> <ul style="clear: both"> 	<li> 		SSH generell auf Port 23 laufen lassen. Nachteil ist dann, das ich intern immer den Port explizit angeben muss.</li> 	<li> 		Einen zweiten SSH auf Port 23 lauschen lassen. Will ich zwei SSHD&#39;s haben? Vielleicht, manchmal!</li> 	<li> 		Ich leite Port 23 auf Port 22 um</li> </ul> <p style="clear: both">In diesem Fall habe ich mich f&uuml;r Variante 3, Umleitung von Port 23 auf Port 22, entschieden. Wer jetzt jedoch auf <code>iptables</code>tippt, liegt daneben. Der XINETD kann n&auml;mlich auch Ports an andere Rechner und Ports weiterleiten.</p> <p style="clear: both"><code>/etc/xinetd.d/ssh23</code>:</p> <blockquote style="clear: both"> <code><p>service ssh23<br />{<br /> type = UNLISTED<br /> disable = no<br /> socket_type = stream<br /> protocol = tcp<br /> port = 23<br /> wait = no<br /> nice = 10<br /> user = root<br /> redirect = localhost 22<br />}</p> </code></blockquote>

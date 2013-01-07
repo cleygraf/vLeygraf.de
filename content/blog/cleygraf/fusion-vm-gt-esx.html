@@ -1,0 +1,8 @@
+---
+kind: article
+title: Fusion VM -> ESX
+created_at: 2010-10-21
+author: Christoph Leygraf
+---
+
+<p style="clear: both">Mit dem aktuellen VMware Converter habe ich eben versucht, ein SLES11-VM von meinem MacBook Pro (also eine mit VMware Fusion angelegte VM) auf einen ESX-Server zu &uuml;bertragen. Der Converter hat sich jedoch beklagt, dass er die Hardwareinformationen nicht auslesen k&ouml;nne. In den Logfiles war schlie&szlig;lich folgende Zeile der Schl&uuml;ssel zur L&ouml;sung:</p> <blockquote style="clear: both"> 	<p style="clear: both"><code>[#1] [2010-10-21 13:00:43.656 02144 info 'App'] [,0] Error 36872 opening disk X:\VMware\SLES11-SMT.vmwarevm\SLES11-SMT.vmdk.</code></p> </blockquote> <p style="clear: both">Irgendetwas stimmte also mit der virtuellen Festplatte nicht. Andere SLES-VM&#39;s lie&szlig;en sich ja konvertieen, nur bei dieser funktionierte es nicht. Ein Vergleich ergab dann, dass bei den anderen SLES-VM&#39;s die Festplatten in 2 GB Dateien aufgeteilt waren. Also habe ich die betroffene VMDK-Datei entsprechend in eine 2 GB Dateien verteilte virtuelle Festplatte umgewandelt, und siehe da, die Konvertierung ist m&ouml;glich.</p> <p style="clear: both">Warum der Konverter aber ein Problem mit gro&szlig;en VMDK-Dateien hat, verstehe ich nicht.</p>

@@ -1,0 +1,8 @@
+---
+kind: article
+title: SSH-Schlüssel und Cygwin SSH-Server unter Windows 7
+created_at: 2012-02-25
+author: Christoph Leygraf
+---
+
+<p>Natürlich möchte ich mich auf meinem Windows 7 Laptop auch wie gewohnt per ssh anmelden können. Kein Problem, unter <a href="http://www.cygwin.com/" target="_blank">Cygwin</a> lässt sich ein SSH-Server installieren und die Konfiguration als Service ist sehr einfach (siehe z. B. <a href="http://www.thomas.maetz-bv.de/2011/03/05/howto-openssh-server-mit-cygwin-unter-windows-7-installieren/" target="_blank">hier</a>).</p><p>Danach kann man sich mit Benutzer und Passwort an dem System anmelden. Schöner wäre es natürlich, wenn ich dazu auch einen SSH-Schlüsselverwenden könnte. Also schnell mein <code>.ssh</code> Verzeichnisstemplate rüberkopiert und es geht: nicht! Der Cygwin SSH-Server sucht eine Datei namens <code>.ssh/authorized_keys</code>, in meinem Template gibt's aber nur ein <code>.ssh/authorized_keys2</code>. Die Lösung ist einfach:</p><p><code>cleygraf@t420 ~ $ mv .ssh/authorized_keys2 .ssh/authorized_keys&nbsp;</code></p><p><code>cleygraf@t420 ~ $</code></p>

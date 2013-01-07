@@ -1,0 +1,8 @@
+---
+kind: article
+title: VMware vCenter Server Appliance (vCSA) mit 4GB RAM (statt 8 GB)
+created_at: 2012-02-23
+author: Christoph Leygraf
+---
+
+<p>Wenn man die vCSA als <a href="http://http://de.wikipedia.org/wiki/Open_Virtualization_Format" title="OVF bei Wikipedia">OVF</a> importiert, sind der virtuelle Maschine standardmäßig 8 GB RAM zugewiesen. Nun haben die ESX-Server in meinem Lab jeweils nur 8 GB RAM, also habe ich den Arbeitsspeicher der virtuelle Maschine auf 2 GB reduziert. Leider ließ sich dann die integrierte Datenbank nicht konfigurieren: Nach Klicken auf <em>Test Settings</em> kam nur noch <em>Requesting information</em> ... nach einiger Zeit läuft das ganze dann wohl in einen Timeout, denn ein leeres Dialogfenster öffnete sich und ich konnte <em>OK</em> klicken - super!</p><p><!--break--></p><p>Also die virtuelle Maschine heruntergefahren, den Arbeitsspeicher auf wieder 8 GB erhöht und - voilà - die Datenbank läßt sich konfigurieren und starten. Danach lässt sich auch der vCenter-Dienst starten. Die CPU-Last der virtuellen Maschine ist dabei dannn für einige Zeit bei fast 100%.</p><p>Ok, mal sehen: der <em>belegte Hostarbeitsspeicher</em> ist laut vSphere-Client jetzt bei knapp 4GB (Datenbank- und vCenter-Dienst laufen), also reduzieren wir mal den Arbeitsspeicher der virtuellen Maschine auf 4 GB und schauen, was passiert: Ja, Datenbank- und vCenter-Dienst starten auch mit 4 GB RAM.</p><p>Nun noch schnell die Zeitzone und die Authentifizierung gegen meine <em>Active Directory Domain</em> einstellen und der vCenter-Server kann genutzt werden.</p>

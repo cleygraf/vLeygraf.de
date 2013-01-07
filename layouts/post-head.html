@@ -1,0 +1,3 @@
+<% if @item[:title] %><h1 class="title"><%= link_to(@item[:title], @item) %></h1><% else %><h1 class="title"><%= item.identifier %></h1><% end %>
+<% if @item[:created_at] && @item[:author] %><h2 class="subtitle"><%= @item[:created_at] %> | <%= @item[:author] %></h2><% end %>
+<%= yield %>

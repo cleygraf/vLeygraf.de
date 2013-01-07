@@ -1,0 +1,8 @@
+---
+kind: article
+title: VMware Workstation als Server
+created_at: 2010-08-29
+author: Christoph Leygraf
+---
+
+<p style="clear: both"><a href="http://www.vleygraf.de/blogs/cleygraf/virtualisierung-für-kleine-und-mittelständische-unternehmen" target="_blank" title="Virtualisierung für kleine und mittelständische Unternehmen">Letzte Woche</a> habe ich &uuml;ber eine Nachfolgel&ouml;sung f&uuml;r VMware Server nachgedacht. Wenn man jedoch nach &quot;<em>VMware Workstation headless</em>&quot; googelt, lernt man, wie man auch die Workstation-Variante als Server missbrauchen kann.<br /> 	Ich benutzte eine aktuelle Ubuntu 64bit Installation mit VMware Workstation 7.1. F&uuml;r die VM habe ich unter &quot;<em>Options</em>&quot; &quot;<em>Remote Display</em>&quot; aktiviert. Auch wenn man sich lokal nicht angemeldet hat, kann man jetzt mit folgendem Kommando &uuml;ber ein SSH-Login die VM starten:</p> <blockquote style="clear: both"> 	<p><code>vmrun -T ws start ~/vmware/Meine_VM/VM.vmx nogui</code></p> </blockquote> <p style="clear: both">Wichtig ist der Parameter &quot;<em>nogui</em>&quot;. Anschlie&szlig;end kann man einen VNC-Viewer benutzen (Verbindung zur IP/Hostnamen des Ubuntu-Systems mit dem in der VM-Konfiguration angegebenen Port) um der VM beim Starten zusehen. Nat&uuml;rlich ist auch ein Login m&ouml;glich.<br /> 	Klasse!</p> <p style="clear: both"><strong>Nachtrag - Achtung:</strong><br /> 	Loggt man sich danach graphisch (also z. B. lokal mit GDM oder remote mit NoMachine) ein und startet VMware Workstation, so wird die laufenden VM &uuml;bernommen. Beim Ausloggen wird die VM dann ausgeschaltet und <strong>l&auml;uft nicht weiter</strong>!</p>

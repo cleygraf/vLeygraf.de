@@ -1,0 +1,8 @@
+---
+kind: article
+title: ESX / ESXi 4.1 nur 8 Zeichen lange Passwörter?
+created_at: 2010-07-20
+author: Christoph Leygraf
+---
+
+<p>In der aktuellen Version der ESX-Server wird statt eines MD5 Hash nur ein DES Hash verwendet, um Passwörter in <font face="Verdana"><code>/etc/shadow</code> zu speichern. Deshalb sind bei der Passwortüberprüfung lokaler Benutzer nur die ersten 8 Zeichen relevant.</font></p> <p>Aus meiner Sicht ist dies nicht wirklich beunruhigend, aber es zeigt, dass bei VMware gerdade&nbsp;doch einiges mit sehr heißer Nadel gestrickt wird. Von einem Update auf vSphere 4.1 werde ich im Moment auf jeden Fall noch noch absehen.</p> <p>Bis jetzt&nbsp;gibt es noch keinen Patch oder Update, dieser <a title="KB1024500: ESX 4.1 root passwords are authenticated up to only 8 characters" href="http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&amp;cmd=displayKC&amp;externalId=1024500" target="_blank">Knowledge Base Artikel</a> zeigt aber, wie man sich vorerst helfen kann.</p> <p><u>Nachtrag:</u><br />Bei einem Update tritt das Problem erstmal nicht auf -&nbsp;allerdings nur&nbsp;solange Passwörter nicht geändert werden.</p>

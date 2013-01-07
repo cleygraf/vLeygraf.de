@@ -1,0 +1,14 @@
+<div id='archiv-head'>
+	<div class='archiv-back'><% if (@item_id >= 1) %><%= link_to('&larr; im Archiv zurück', "/archiv/#{@item_id}/") %> <% end %>&nbsp;</div><!-- /.archiv-back --><div class='archiv-forward'>&nbsp;<% if (@item_id < @pages_max) %><%= link_to('im Archiv vor &rarr;', "/archiv/#{@item_id+2}/") %><% end %> </div><!-- /.archiv-forward -->
+</div><!-- /#archiv-head -->
+<% pages = sorted_articles.slice(@item_id*@config[:page_size], @config[:page_size]) %>
+<% pages.each do |post| %>
+  <div class='blogpost-archiv'>
+    <h1 class="title"><%= link_to(post[:title], post.path) %></h1>
+    <% if post[:created_at] && post[:author] %><h2 class="subtitle"><%= post[:created_at] %> | <%= post[:author] %></h2><% end %>
+    <%= get_post_start(post) %>
+  </div><!-- /.blogpost -->
+<% end %>
+<div id='archiv-foot'>
+	<div class='archiv-back'><% if (@item_id >= 1) %><%= link_to('&larr; im Archiv zurück', "/archiv/#{@item_id}/") %> <% end %>&nbsp;</div><!-- /.archiv-back --><div class='archiv-forward'>&nbsp;<% if (@item_id < @pages_max) %><%= link_to('im Archiv vor &rarr;', "/archiv/#{@item_id+2}/") %><% end %> </div><!-- /.archiv-forward -->
+</div><!-- /#archiv-foot -->

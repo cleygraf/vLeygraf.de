@@ -1,0 +1,8 @@
+---
+kind: article
+title: SLES SMT-Server umziehen
+created_at: 2010-10-28
+author: Christoph Leygraf
+---
+
+<p style="clear: both">Heute wollte ich einen SMT-Server ( Subscription Management Tool - Zentraler Update- und Registrierungsserver f&uuml;r Novell SLES), den ich f&uuml;r einen Kunden vorbereitet hatte, im Netz des Kunden zum Einsatz bringen. Ein Kollege (@Harry: Danke!) hatte bereits die virtuelle Maschine vor Ort von einer USB-Platte in die VMware vSphere-Umgebung importiert. An mir war es, die Konfiguration von IP, Hostnamen ... an das Kundennetz anzupassen. Das war schnell getan.<br /> 	Da dieser SMT-Server auch gleichzeitig als Install-Server dient, habe ich schnell eine neue Test-VM installiert: Alles funktioniert - bis jetzt!<br /> 	Nun diese Test-VM am SMT-Server registieren und: &quot;ERROR: SSL peer certificate or SS H md5 fingerprint was not not OK: (51)&quot;<br /> 	Keine Registrierung und Updates konnten auch nicht installiert werden, sch****<br /> 	Nach einigen Versuchen, ich hatte z. B. die neue IP nicht &uuml;berall eingetragen, kam ich nicht weiter. Was hei&szlig;t das &quot;SSL peer certificate ... not OK&quot;? Klar, Hostnamen und IP hatte ich ge&auml;ndert, dann passt auch das Zertifikat nicht mehr. Nur wie &auml;ndert man das?<br /> 	Google ist ja unser aller Freund und f&uuml;hrte mich zu der Seite &quot;<a href="http://www.novell.com/support/php/search.do?cmd=displayKC&amp;docType=kc&amp;externalId=7006024" target="_blank" title="Novell Support">How to recreate SMT 11 CA and server certificate</a>&quot;. Mit dieser Anleitung und etwas Geduld habe ich dann dem SMT-Server ein neues Zertifikat verpast und siehe da, registrieren und Updates ziehen geht!</p>

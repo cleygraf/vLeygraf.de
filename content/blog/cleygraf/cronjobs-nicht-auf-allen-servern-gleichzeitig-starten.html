@@ -1,0 +1,8 @@
+---
+kind: article
+title: Cronjobs nicht auf allen Servern gleichzeitig starten
+created_at: 2011-07-13
+author: Christoph Leygraf
+---
+
+<p style="clear: both">Mit <a href="http://de.wikipedia.org/wiki/Cron" title="Wikipedia: cron" target="_blank">cron</a> ist es relativ einfach, automatisch und zeitgesteuert Aktionen auf Servern auszulösen. Wenn dabei jedoch auf ein zentrales System zugegriffen wird, ist es meist geschickter, die Aktionen etwas zeitversetzt zu starten. Dies kann man manuell beim Anlegen der cron-Einträge erledigen oder man sorgt dafür, dass die Ausführung jedes Mal um eine zufällig gewählte Pause verzögert wird.</p><p style="clear: both"><code>*/30 * * * * /bin/bash -c 'sleep $[ ( $RANDOM % 1800 ) + 1 ]s && AKTION '</code></p><p style="clear: both">Dieser Eintrag in der <em>Crontab</em> führt die AKTION jede Stunde zweimal aus, einmal zu einem zufälligen Zeitpunkt in der ersten halben Stunde und dann noch einmal wieder zu einem zufälligen Zeitpunkt in der zweiten Hälfte der Stunde.</p><br class='final-break' style='clear: both' />
