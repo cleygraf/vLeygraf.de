@@ -47,6 +47,7 @@ compile '/blog/cleygraf/*' do
     # don’t filter binary items
   else
     filter :erb
+    filter :kramdown if item[:extension] == 'md'
     layout 'post'
     layout 'post-head'
     snapshot :body

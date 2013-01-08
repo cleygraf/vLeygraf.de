@@ -146,3 +146,27 @@ p.blognavigation {
 strong {
 	font-weight: bold;
 }
+
+code {
+    white-space: nowrap;
+    font-size: 1.1em;
+}
+
+pre {
+    white-space: pre-wrap;
+    width: 96%;
+    margin-bottom: 24px;
+    overflow: hidden;
+    padding: 3px 10px;
+    -webkit-border-radius: 3px;
+    background-color: #eee;
+    border: 1px solid #ddd;
+}
+
+pre code {
+    white-space: pre-wrap;
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    -webkit-border-radius: 0;
+}
