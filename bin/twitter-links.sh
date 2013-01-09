@@ -70,3 +70,32 @@ for datefilter in $datelist; do
 		echo "</ul>" >> "$outfile"
 	fi
 done
+
+#
+# All links on one page
+#
+
+outfile="$execpath/../content/blog/cleygraf/alle_fundstuecke.html"
+
+# Create list of links
+echo "---" > "$outfile"
+echo "kind: article" >> "$outfile"
+echo "title: Alle Fundstücke" >> "$outfile"
+echo "created_at: $year-$month-$day" >> "$outfile"
+echo "author: Christoph Leygraf" >> "$outfile"
+echo "---" >> "$outfile"
+echo "" >> "$outfile"
+
+echo "<ul>" >> "$outfile"
+
+count=0
+IFS_OLD=$IFS; IFS=$'\n'
+for i in $(cat $infile|sed 1d|awk -F',' '{for (i=4; i<NF; i++) printf $i " "; print $NF}'|sed 's/^"\(.*\)"$/\1/'|sed 's/.*LINK://')
+do
+	description=$(echo $i|sed "s/\(.*\)http.*/\1/")
+	url=$(echo $i|sed "s/.*\(http.*\)/\1/")
+	unshortenedurl=$($unshorten_command "$url")
+	echo "<li><a href='$unshortenedurl'>$description</a></li>" >> "$outfile"
+done
+IFS=IFS_OLD
+echo "</ul>" >> "$outfile"
