@@ -19,7 +19,7 @@ else exit
 fi
 
 # Fetch all my tweets startin containing "LINK:"
-$t_command search timeline "LINK:" -l -N --csv > $infile 
+#$t_command search timeline "LINK:" -l -N --csv > $infile 
 
 # Create filter from 1st parameter 
 if [ "$#" -eq 0 ]; then
@@ -38,7 +38,7 @@ for datefilter in $datelist; do
 
 
 	# Matching tweets for today?
-	if [ "$(wc -l $infile|grep "$datefilter"|awk '{ print $1 }')" != "0" ]; then
+	if [ "$(grep "$datefilter" $infile|wc -l|awk '{ print $1 }')" != "0" ]; then
 
 		# Create list of links
 		echo "---" > "$outfile"
@@ -71,31 +71,44 @@ for datefilter in $datelist; do
 	fi
 done
 
-#
-# All links on one page
-#
 
-outfile="$execpath/../content/blog/cleygraf/alle_fundstuecke.html"
+#
+# All links on some pages
+#
 
 # Create list of links
-echo "---" > "$outfile"
-echo "kind: article" >> "$outfile"
-echo "title: Alle Fundstücke" >> "$outfile"
-echo "created_at: $year-$month-$day" >> "$outfile"
-echo "author: Christoph Leygraf" >> "$outfile"
-echo "---" >> "$outfile"
-echo "" >> "$outfile"
+linksperpage=20
+totallinks=$(wc -l "$infile"|awk '{ print $1 }')
+let totalpages=$totallinks/$linksperpage
+let linkbase=$totalpages*$linksperpage
+if [ $totallinks -gt $linkbase ]; then let totalpages=$totalpages+1; fi
 
-echo "<ul>" >> "$outfile"
-
-count=0
+pagecount=1; linkcount=1
 IFS_OLD=$IFS; IFS=$'\n'
 for i in $(cat $infile|sed 1d|awk -F',' '{for (i=4; i<NF; i++) printf $i " "; print $NF}'|sed 's/^"\(.*\)"$/\1/'|sed 's/.*LINK://')
 do
+	if [ $linkcount -eq 1 ]; then
+		outfile="$execpath/../content/blog/cleygraf/alle_fundstuecke-$pagecount.html"
+		echo "---" > "$outfile"
+		echo "kind: article" >> "$outfile"
+		echo "title: Alle Fundstücke (Seite $pagecount von $totalpages)" >> "$outfile"
+		echo "created_at: $year-$month-$day" >> "$outfile"
+		echo "author: Christoph Leygraf" >> "$outfile"
+		echo "---" >> "$outfile"
+		echo "" >> "$outfile"
+	fi
+
 	description=$(echo $i|sed "s/\(.*\)http.*/\1/")
 	url=$(echo $i|sed "s/.*\(http.*\)/\1/")
 	unshortenedurl=$($unshorten_command "$url")
 	echo "<li><a href='$unshortenedurl'>$description</a></li>" >> "$outfile"
+
+	let linkcount=$linkcount+1
+	if [ $linkcount -gt $linksperpage ]; then 
+		echo "</ul>" >> "$outfile"
+		let pagecount=$pagecount+1
+		linkcount=1;
+	fi
 done
 IFS=IFS_OLD
 echo "</ul>" >> "$outfile"
