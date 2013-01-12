@@ -27,6 +27,7 @@ preprocess do
 
     @items << Nanoc::Item.new(
       "<%= render 'pagination_page', :item_id => #{i}, :pages_max => #{article_groups.size-1} %>",
+    #  "<%= puts 'Hallo' %>",
       { :title => "Archiv (Beitrag #{first} bis #{last})" },
       "/archiv/#{i+1}/"
     )
@@ -34,7 +35,7 @@ preprocess do
 end
 
 compile '/archive/*/' do
-  filter :erb
+#  filter :erb
   layout '/default/'
 end
 
