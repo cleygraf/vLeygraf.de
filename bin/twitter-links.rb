@@ -5,6 +5,7 @@ require 'faster_csv'
 require 'unshorten'
 
 twitterlinks="#{File.expand_path File.dirname(__FILE__)}/../tmp/twitter-links.txt"
+unshorturls = Hash.new {}
 
 FasterCSV.foreach("#{twitterlinks}", :quote_char => '"', :col_sep =>',', :row_sep =>:auto) do |row|
 	if row[0] != "ID" then
@@ -17,7 +18,8 @@ FasterCSV.foreach("#{twitterlinks}", :quote_char => '"', :col_sep =>',', :row_se
 			linktext = [$1]
 			linkshorturl = [$2]
 			linkurl = Unshorten["#{linkshorturl}"]
+			unshorturls["#{linkshorturl}"] = linkurl
 		end
-		puts "#{tweetdate} #{linktext} -> \"#{linkurl}\""
+		#puts "#{tweetdate} #{linktext} -> \"#{linkurl}\""
 	end 
  end
