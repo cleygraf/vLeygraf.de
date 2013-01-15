@@ -43,7 +43,7 @@ for datefilter in $datelist; do
 		# Create list of links
 		echo "---" > "$outfile"
 		echo "kind: article" >> "$outfile"
-		echo "title: Fundstücke vom $day.$month.$year" >> "$outfile"
+		echo "title: \"Fundstücke vom $day.$month.$year\"" >> "$outfile"
 		echo "created_at: $datefilter" >> "$outfile"
 		echo "author: Christoph Leygraf" >> "$outfile"
 		echo "---" >> "$outfile"
@@ -91,7 +91,7 @@ do
 		outfile="$execpath/../content/blog/cleygraf/alle_fundstuecke-$pagecount.html"
 		echo "---" > "$outfile"
 		echo "kind: article" >> "$outfile"
-		echo "title: Alle Fundstücke (Seite $pagecount von $totalpages)" >> "$outfile"
+		echo "title: \"Alle Fundstücke (Seite $pagecount von $totalpages)\"" >> "$outfile"
 		echo "created_at: $year-$month-$day" >> "$outfile"
 		echo "author: Christoph Leygraf" >> "$outfile"
 		echo "---" >> "$outfile"
