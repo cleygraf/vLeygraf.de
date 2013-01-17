@@ -19,7 +19,7 @@ else exit
 fi
 
 # Fetch all my tweets startin containing "LINK:"
-$t_command search timeline "LINK:" -l -N --csv > $infile 
+#$t_command search timeline "LINK:" -l -N --csv > $infile 
 
 # Create filter from 1st parameter 
 if [ "$#" -eq 0 ]; then
@@ -30,7 +30,7 @@ fi
 
 for datefilter in $datelist; do
 	
-	outfile="$execpath/../content/blog/cleygraf/fundstuecke_$datefilter.html"
+	outfile="$execpath/../content/generated/fundstuecke_$datefilter.html"
 
 	year=$(echo "$datefilter"|awk -F'-' '{ print $1 }')
 	month=$(echo "$datefilter"|awk -F'-' '{ print $2 }')
@@ -58,7 +58,7 @@ for datefilter in $datelist; do
 		do
 			description=$(echo $i|sed "s/\(.*\)http.*/\1/")
 			url=$(echo $i|sed "s/.*\(http.*\)/\1/")
-			unshortenedurl=$($unshorten_command "$url")
+#			unshortenedurl=$($unshorten_command "$url")
 
 			# HTML-output
 			if [ $count -eq 3 ]; then echo -e "\n</ul>\n<!--break-->\nUnd noch mehr:\n<ul>\n" >> "$outfile"; fi
@@ -88,7 +88,7 @@ IFS_OLD=$IFS; IFS=$'\n'
 for i in $(cat $infile|sed 1d|awk -F',' '{for (i=4; i<NF; i++) printf $i " "; print $NF}'|sed 's/^"\(.*\)"$/\1/'|sed 's/.*LINK://')
 do
 	if [ $linkcount -eq 1 ]; then
-		outfile="$execpath/../content/blog/cleygraf/alle_fundstuecke-$pagecount.html"
+		outfile="$execpath/../content/generated/alle_fundstuecke-$pagecount.html"
 		echo "---" > "$outfile"
 		echo "kind: article" >> "$outfile"
 		echo "title: \"Alle Fundstücke (Seite $pagecount von $totalpages)\"" >> "$outfile"
@@ -100,7 +100,7 @@ do
 
 	description=$(echo $i|sed "s/\(.*\)http.*/\1/")
 	url=$(echo $i|sed "s/.*\(http.*\)/\1/")
-	unshortenedurl=$($unshorten_command "$url")
+#	unshortenedurl=$($unshorten_command "$url")
 	echo "<li><a href='$unshortenedurl'>$description</a></li>" >> "$outfile"
 
 	let linkcount=$linkcount+1

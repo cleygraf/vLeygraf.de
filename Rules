@@ -43,6 +43,20 @@ compile '/css/*' do
   # don’t filter or layout
 end
 
+compile '/generated/*' do
+  if item.binary?
+    # don’t filter binary items
+  else
+    filter :erb
+    layout 'post'
+    layout 'post-head'
+    snapshot :body
+    layout 'post-foot'
+    layout 'default'
+  end
+end
+
+
 compile '/blog/cleygraf/*' do
   if item.binary?
     # don’t filter binary items
