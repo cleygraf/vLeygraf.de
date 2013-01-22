@@ -58,7 +58,7 @@ for datefilter in $datelist; do
 		do
 			description=$(echo $i|sed "s/\(.*\)http.*/\1/")
 			url=$(echo $i|sed "s/.*\(http.*\)/\1/")
-#			unshortenedurl=$($unshorten_command "$url")
+			unshortenedurl=$($unshorten_command "$url")
 
 			# HTML-output
 			if [ $count -eq 3 ]; then echo -e "\n</ul>\n<!--break-->\nUnd noch mehr:\n<ul>\n" >> "$outfile"; fi
@@ -100,7 +100,7 @@ do
 
 	description=$(echo $i|sed "s/\(.*\)http.*/\1/")
 	url=$(echo $i|sed "s/.*\(http.*\)/\1/")
-#	unshortenedurl=$($unshorten_command "$url")
+	unshortenedurl=$($unshorten_command "$url")
 	echo "<li><a href='$unshortenedurl'>$description</a></li>" >> "$outfile"
 
 	let linkcount=$linkcount+1
