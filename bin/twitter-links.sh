@@ -19,7 +19,7 @@ else exit
 fi
 
 # Fetch all my tweets startin containing "LINK:"
-$t_command search timeline "LINK:" -l -N --csv > $infile 
+# $t_command search timeline "LINK:" -l -N --csv > $infile 
 
 # Create filter from 1st parameter 
 if [ "$#" -eq 0 ]; then
@@ -90,7 +90,7 @@ do
 	if [ $linkcount -eq 1 ]; then
 		outfile="$execpath/../content/generated/alle_fundstuecke-$pagecount.html"
 		echo "---" > "$outfile"
-		echo "kind: article" >> "$outfile"
+		# echo "kind: article" >> "$outfile"
 		echo "title: \"Alle Fundstücke (Seite $pagecount von $totalpages)\"" >> "$outfile"
 		echo "created_at: $year-$month-$day" >> "$outfile"
 		echo "author: Christoph Leygraf" >> "$outfile"

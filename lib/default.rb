@@ -5,20 +5,24 @@ include Nanoc3::Helpers::LinkTo
 include Nanoc3::Helpers::Blogging
 
 def previous_link
-    prv = sorted_articles.index(@item) - 1
-    if sorted_articles[prv].nil?
-        return ""
-    else
-        link_to('&larr;', sorted_articles[prv].reps[0])
+    if @item[:kind] == "article"
+        prv = sorted_articles.index(@item) - 1
+        if sorted_articles[prv].nil?
+            return ""
+        else
+            link_to('&larr;', sorted_articles[prv].reps[0])
+        end
     end
 end
 
 def next_link
-    nxt = sorted_articles.index(@item) + 1
-    if sorted_articles[nxt].nil?
-        return ""
-    else
-    link_to('&rarr;', sorted_articles[nxt].reps.find { |r| r.name == :default })
+    if @item[:kind] == "article"
+        nxt = sorted_articles.index(@item) + 1
+        if sorted_articles[nxt].nil?
+            return ""
+        else
+        link_to('&rarr;', sorted_articles[nxt].reps.find { |r| r.name == :default })
+        end
     end
 end
 
