@@ -9,27 +9,43 @@ infile="$execpath/../tmp/twitter-links.txt"
 # Path to "t" command
 if [ -x '/var/lib/gems/1.8/bin/t' ]; then t_command="/var/lib/gems/1.8/bin/t"
 elif [ -x '/usr/bin/t' ]; then t_command="/usr/bin/t"
-else exit
+else
+	echo "\"t\" command not found" 
+	exit
 fi
+echo "Using \"$t_command\""
 
 # Path to "unshorten" command
 if [ -x '/var/lib/gems/1.8/bin/unshorten' ]; then unshorten_command="/var/lib/gems/1.8/bin/unshorten"
 elif [ -x '/usr/bin/unshorten' ]; then unshorten_command="/usr/bin/unshorten"
-else exit
+else
+	echo "\"unshorten\" command not found" 
+	exit
 fi
+echo "Using \"$unshorten_command\""
+
+echo ""
 
 # Fetch all my tweets startin containing "LINK:"
-# $t_command search timeline "LINK:" -l -N --csv > $infile 
+old_tweetcount=$(cat $infile | wc -l)
+#$t_command search timeline "LINK:" -l -N --csv >> $infile
+/usr/bin/sort -u $infile -o $infile
+new_tweetcount=$(cat $infile | wc -l)
+let tweetdelta=$new_tweetcount-$old_tweetcount
+echo "$tweetdelta new tweets"
+
+echo ""
 
 # Create filter from 1st parameter 
 if [ "$#" -eq 0 ]; then
-	datelist="$(cat $infile|awk -F',' '{ print $2 }'|awk '{ print $1 }'|tail -n +2|uniq)"
+	datelist="$(grep -v "^ID" $infile|awk -F',' '{ print $2 }'|awk '{ print $1 }'|sort -u)"
 else
 	datelist="$1"
 fi
 
 for datefilter in $datelist; do
-	
+	echo "Parsing tweets from $datefilter"
+
 	outfile="$execpath/../content/generated/fundstuecke_$datefilter.html"
 
 	year=$(echo "$datefilter"|awk -F'-' '{ print $1 }')
@@ -56,7 +72,7 @@ for datefilter in $datelist; do
 		IFS_OLD=$IFS; IFS=$'\n'
 		for i in $(cat $infile|grep "$datefilter"|awk -F',' '{for (i=4; i<NF; i++) printf $i " "; print $NF}'|sed 's/^"\(.*\)"$/\1/'|sed 's/.*LINK://')
 		do
-			description=$(echo $i|sed "s/\(.*\)http.*/\1/")
+			description=$(echo $i|sed "s/\(.*\)http.*/\1/")			
 			url=$(echo $i|sed "s/.*\(http.*\)/\1/")
 			unshortenedurl=$($unshorten_command "$url")
 
@@ -76,18 +92,29 @@ done
 # All links on some pages
 #
 
+echo ""
+echo "Creating \"Alle Fundstuecke\""
+
 # Create list of links
 linksperpage=20
-totallinks=$(wc -l "$infile"|awk '{ print $1 }')
+totallinks=$(grep -v "^ID" "$infile"|grep -v "^$"|wc -l)
+echo "$totallinks links"
 let totalpages=$totallinks/$linksperpage
 let linkbase=$totalpages*$linksperpage
 if [ $totallinks -gt $linkbase ]; then let totalpages=$totalpages+1; fi
 
+lasttweetdate="$(grep -v "^ID" $infile|awk -F',' '{ print $2 }'|awk '{ print $1 }'|sort -u|tail -n 1)"
+year=$(echo "$lasttweetdate"|awk -F'-' '{ print $1 }')
+month=$(echo "$lasttweetdate"|awk -F'-' '{ print $2 }')
+day=$(echo "$lasttweetdate"|awk -F'-' '{ print $3 }')
+echo "Newest tweet from $year-$month-$day"
+
 pagecount=1; linkcount=1
 IFS_OLD=$IFS; IFS=$'\n'
-for i in $(cat $infile|sed 1d|awk -F',' '{for (i=4; i<NF; i++) printf $i " "; print $NF}'|sed 's/^"\(.*\)"$/\1/'|sed 's/.*LINK://')
+for i in $(grep -v "^ID" $infile|grep -v "^$"|sed 1d|awk -F',' '{for (i=4; i<NF; i++) printf $i " "; print $NF}'|sed 's/^"\(.*\)"$/\1/'|sed 's/.*LINK://')
 do
 	if [ $linkcount -eq 1 ]; then
+		echo "alle_fundstuecke-$pagecount"
 		outfile="$execpath/../content/generated/alle_fundstuecke-$pagecount.html"
 		echo "---" > "$outfile"
 		# echo "kind: article" >> "$outfile"
@@ -96,6 +123,7 @@ do
 		echo "author: Christoph Leygraf" >> "$outfile"
 		echo "---" >> "$outfile"
 		echo "" >> "$outfile"
+		echo "<ul>" >> "$outfile"
 	fi
 
 	description=$(echo $i|sed "s/\(.*\)http.*/\1/")
@@ -104,11 +132,35 @@ do
 	echo "<li><a href='$unshortenedurl'>$description</a></li>" >> "$outfile"
 
 	let linkcount=$linkcount+1
-	if [ $linkcount -gt $linksperpage ]; then 
+	if [ $linkcount -ge $linksperpage ]; then 
 		echo "</ul>" >> "$outfile"
+		echo "<div class=\"hnavigation\"><ul>" >> "$outfile"
+		for (( c=$totalpages; c>0; c-- ))
+		do
+			if [ $c -eq $pagecount ]; then
+				echo "&nbsp<li>$c</li>" >> "$outfile"
+			else
+				echo "&nbsp<li><a href='/generated/alle_fundstuecke-$c/'>$c</a></li> " >> "$outfile"
+			fi
+		done
+		echo "</ul></div><!-- / .hnavigation -->" >> "$outfile"
 		let pagecount=$pagecount+1
 		linkcount=1;
 	fi
 done
 IFS=IFS_OLD
-echo "</ul>" >> "$outfile"
+
+
+if [ $linkcount -gt 1 ]; then
+	echo "</ul>" >> "$outfile"
+	echo "<div class=\"hnavigation\"><ul>" >> "$outfile"
+	for (( c=$totalpages; c>0; c-- ))
+	do
+		if [ $c -eq $pagecount ]; then
+			echo "&nbsp<li>$c</li>" >> "$outfile"
+		else
+			echo "&nbsp<li><a href='/generated/alle_fundstuecke-$c/'>$c</a></li> " >> "$outfile"
+		fi
+	done
+	echo "</ul></div><!-- / .hnavigation -->" >> "$outfile"
+fi

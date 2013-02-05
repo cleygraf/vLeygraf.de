@@ -170,3 +170,9 @@ pre code {
     background-color: transparent;
     -webkit-border-radius: 0;
 }
+
+.hnavigation ul li {
+	padding-left: 5px;
+	display:inline;
+	float: right;
+}
