@@ -96,7 +96,7 @@ echo ""
 echo "Creating \"Alle Fundstuecke\""
 
 # Create list of links
-linksperpage=20
+linksperpage=15
 totallinks=$(grep -v "^ID" "$infile"|grep -v "^$"|wc -l)
 echo "$totallinks links"
 let totalpages=$totallinks/$linksperpage
