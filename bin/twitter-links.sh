@@ -29,7 +29,7 @@ echo ""
 # Fetch all my tweets startin containing "LINK:"
 old_tweetcount=$(cat $infile | wc -l)
 $t_command search timeline "LINK:" -l -N --csv >> $infile
-/usr/bin/sort -u $infile -o $infile
+/usr/bin/sort -ru $infile -o $infile
 new_tweetcount=$(cat $infile | wc -l)
 let tweetdelta=$new_tweetcount-$old_tweetcount
 echo "$tweetdelta new tweets"
