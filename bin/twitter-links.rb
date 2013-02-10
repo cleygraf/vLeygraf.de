@@ -17,8 +17,8 @@ linksperpage = 15
 unshorturls = Hash[]
 tweets = Hash[]
 
-#unshorturls = JSON.parse(File.read("#{unshortenjsonfile}"))
-#tweets = JSON.parse(File.read("#{linksjsonfile}"))
+unshorturls = JSON.parse(File.read("#{unshortenjsonfile}"))
+tweets = JSON.parse(File.read("#{linksjsonfile}"))
 
 CSV.foreach("#{twitterlinks}", :quote_char => '"', :col_sep =>',', :row_sep =>:auto, :encoding => "UTF-8") do |row|
 	if row[0] != "ID" then
@@ -74,7 +74,7 @@ tweets.keys.sort.map do |ts,t|
     			if c == allpagecount then
     		        ALLFILE.write("&nbsp<li>#{c}</li>\n")
     			else
-    			    ALLFILE.write("&nbsp<li><a href='/generated/alle_fundstuecke-$c/'>#{c}</a></li>\n")
+    			    ALLFILE.write("&nbsp<li><a href='/generated/alle_fundstuecke-#{c}/'>#{c}</a></li>\n")
     			end
                 c -= 1
 		    end until c == 0
