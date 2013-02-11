@@ -6,15 +6,6 @@
 execpath=$(dirname $0)
 infile="$execpath/../tmp/twitter-links.txt"
 
-# Path to "t" command
-if [ -x '/var/lib/gems/1.8/bin/t' ]; then t_command="/var/lib/gems/1.8/bin/t"
-elif [ -x '/usr/bin/t' ]; then t_command="/usr/bin/t"
-else
-	echo "\"t\" command not found" 
-	exit
-fi
-echo "Using \"$t_command\""
-
 # Path to "unshorten" command
 if [ -x '/var/lib/gems/1.8/bin/unshorten' ]; then unshorten_command="/var/lib/gems/1.8/bin/unshorten"
 elif [ -x '/usr/bin/unshorten' ]; then unshorten_command="/usr/bin/unshorten"
@@ -23,16 +14,6 @@ else
 	exit
 fi
 echo "Using \"$unshorten_command\""
-
-echo ""
-
-# Fetch all my tweets startin containing "LINK:"
-old_tweetcount=$(cat $infile | wc -l)
-$t_command search timeline "LINK:" -l -N --csv >> $infile
-/usr/bin/sort -ru $infile -o $infile
-new_tweetcount=$(cat $infile | wc -l)
-let tweetdelta=$new_tweetcount-$old_tweetcount
-echo "$tweetdelta new tweets"
 
 echo ""
 
