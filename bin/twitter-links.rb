@@ -6,6 +6,7 @@ require 'csv'
 require 'unshorten'
 require 'json'
 require 'digest/md5'
+require 'faster_csv'
 
 # Filenames
 twitterlinks = "#{File.expand_path File.dirname(__FILE__)}/../tmp/twitter-links.txt"
@@ -20,7 +21,7 @@ tweets = Hash[]
 unshorturls = JSON.parse(File.read("#{unshortenjsonfile}"))
 tweets = JSON.parse(File.read("#{linksjsonfile}"))
 
-CSV.foreach("#{twitterlinks}", :quote_char => '"', :col_sep =>',', :row_sep =>:auto, :encoding => "UTF-8") do |row|
+FasterCSV.foreach("#{twitterlinks}", :quote_char => '"', :col_sep =>',', :row_sep =>:auto, :encoding => "UTF-8") do |row|
 	if row[0] != "ID" then
 		tweetid = row[0]
 		timestamp = row[1]
