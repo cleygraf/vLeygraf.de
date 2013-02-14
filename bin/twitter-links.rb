@@ -46,13 +46,13 @@ FasterCSV.foreach("#{twitterlinks}", :quote_char => '"', :col_sep =>',', :row_se
 			tweets["#{timestamp}"] = Hash[]
 			tweets["#{timestamp}"]["URL"] = "#{linkurl}"
 			tweets["#{timestamp}"]["TEXT"] = "#{linktext}"
-            if linkurl =~ /http[s]*:\/\/([^/])*\/.*/i
-                puts $1
+            if linkurl =~ /htttp[s]*:\/\/([^\/])*\/.*/i
+                puts "Hostname #{$1}"
             else
                 puts "Parsing failed for link \"#{linkurl}\""
             end
     		else
-                puts "Failed to parse this tweet: \"#{tweettext]\""
+                puts "Failed to parse this tweet: \"#{tweettext}\""
             end
 		end
 	end 
