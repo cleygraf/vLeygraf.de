@@ -18,11 +18,11 @@ echo ""
 
 # Fetch all my tweets startin containing "LINK:"
 old_tweetcount=$(cat $infile | wc -l)
-echo -n "Fetching tweets ... " && $t_command search timeline "LINK:" -l -N --csv >> $infile
-echo -n "finished\n"
-echo -n "Parsing tweets ... "
+echo -en "Fetching tweets ... " && $t_command search timeline "LINK:" -l -N --csv >> $infile
+echo -en "finished\n"
+echo -en "Parsing tweets ... "
 /usr/bin/sort -ru $infile -o $infile
 new_tweetcount=$(cat $infile | wc -l)
 let tweetdelta=$new_tweetcount-$old_tweetcount
-echo -n "finished\n"
+echo -en "finished\n"
 echo "$tweetdelta new tweets"
