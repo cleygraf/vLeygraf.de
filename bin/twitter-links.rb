@@ -6,7 +6,7 @@ require 'csv'
 require 'unshorten'
 require 'json'
 require 'digest/md5'
-require 'faster_csv'
+#require 'faster_csv'
 
 # Filenames
 twitterlinks = "#{File.expand_path File.dirname(__FILE__)}/../tmp/twitter-links.txt"
@@ -17,11 +17,13 @@ linksperpage = 15
 
 unshorturls = Hash[]
 tweets = Hash[]
+linksbyhostname = Hash[]
 
 unshorturls = JSON.parse(File.read("#{unshortenjsonfile}"))
-tweets = JSON.parse(File.read("#{linksjsonfile}"))
+#tweets = JSON.parse(File.read("#{linksjsonfile}"))
 
-FasterCSV.foreach("#{twitterlinks}", :quote_char => '"', :col_sep =>',', :row_sep =>:auto, :encoding => "UTF-8") do |row|
+#FasterCSV.foreach("#{twitterlinks}", :quote_char => '"', :col_sep =>',', :row_sep =>:auto, :encoding => "UTF-8") do |row|
+CSV.foreach("#{twitterlinks}", :quote_char => '"', :col_sep =>',', :row_sep =>:auto, :encoding => "UTF-8") do |row|
 	if row[0] != "ID" then
 		tweetid = row[0]
 		timestamp = row[1]
@@ -30,9 +32,9 @@ FasterCSV.foreach("#{twitterlinks}", :quote_char => '"', :col_sep =>',', :row_se
 			tweetdate = $1
 		end
 		if ! tweets["#{timestamp}"] then
-			if tweettext =~ /\A"*LINK:\s*(.*\S)\s*(https*:\/\/.*)\s*$/i
+			if tweettext =~ /\A"*LINK:\s*(.*\S)\s*https*:\/\/(.*)\s*$/i
 				linktext = $1
-				linkshorturl = $2
+				linkshorturl = $2 		# without leading https:// oder http://
 				if ! unshorturls["#{linkshorturl}"] then
 					linkurl = Unshorten["#{linkshorturl}"]
 					if linkurl != linkshorturl then
@@ -43,14 +45,19 @@ FasterCSV.foreach("#{twitterlinks}", :quote_char => '"', :col_sep =>',', :row_se
 				else
 					linkurl = unshorturls["#{linkshorturl}"]
 				end
-			tweets["#{timestamp}"] = Hash[]
-			tweets["#{timestamp}"]["URL"] = "#{linkurl}"
-			tweets["#{timestamp}"]["TEXT"] = "#{linktext}"
-            if linkurl =~ /htttp[s]*:\/\/([^\/])*\/.*/i
-                puts "Hostname #{$1}"
-            else
-                puts "Parsing failed for link \"#{linkurl}\""
-            end
+				tweets["#{timestamp}"] = Hash[]
+				tweets["#{timestamp}"]["URL"] = "#{linkurl}"
+				tweets["#{timestamp}"]["TEXT"] = "#{linktext}"
+	            if linkurl =~ /https*:\/\/([a-zA-Z0-9\.-]*)\/.*/
+	            	linkhostname = $1
+	            	if ! linksbyhostname["#{linkhostname}"]
+	            		linksbyhostname["#{linkhostname}"] = Hash[]
+	            	end
+	            	linksbyhostname["#{linkhostname}"]["#{timestamp}"] = "#{linktext}: #{linkurl}"
+#	            	puts ">> #{linkhostname} #{timestamp} -> #{linktext}: #{linkurl}"
+	            else
+	                puts "Parsing failed for link \"#{linkurl}\""
+	            end
     		else
                 puts "Failed to parse this tweet: \"#{tweettext}\""
             end
@@ -86,7 +93,7 @@ tweets.keys.sort.map do |ts,t|
     			end
                 c -= 1
 		    end until c == 0
-            ALLFILE.write("</ul>\n")
+            ALLFILE.write("</div></ul>\n")
 			ALLFILE.close unless ALLFILE == nil
 		end
         allpagecount = allpagecount + 1
@@ -142,4 +149,49 @@ ALLFILE.close unless ALLFILE == nil
 
 DAILYFILE.write("</ul>")
 DAILYFILE.close unless DAILYFILE == nil
+
+lasthostname = ""
+hostnamelinecount = 0
+hostnamepagecount = 0
+hostnamelinenum = linksbyhostname.size + tweets.size
+hostnamepagenum = (hostnamelinenum / linksperpage.to_f).ceil
+linksbyhostname.keys.sort.map do |host,v|
+    if hostnamelinecount == 0 then
+    	if hostnamepagecount != 0 then
+			HOSTNAMEFILE.write("</ul>\n")
+            HOSTNAMEFILE.write("<div class=\"hnavigation\"><ul>\n")
+			# c = pagenum
+			# begin
+			# 	if c == allpagecount then
+			#         HOSTNAMEFILE.write("&nbsp<li>#{c}</li>\n")
+			# 	else
+			# 	    HOSTNAMEFILE.write("&nbsp<li><a href='/generated/alle_fundstuecke-#{c}/'>#{c}</a></li>\n")
+			# 	end
+			#     c -= 1
+			# end until c == 0
+            HOSTNAMEFILE.write("</div></ul>\n")
+			HOSTNAMEFILE.close unless HOSTNAMEFILE == nil
+		end
+        hostnamepagecount += 1
+    	Object.class_eval{remove_const :HOSTNAMEOUTFILE} if defined?(HOSTNAMEOUTFILE)
+		HOSTNAMEOUTFILE = "#{File.expand_path File.dirname(__FILE__)}/../content/generated/fundstuecke-website-#{hostnamepagecount}.html"
+		Object.class_eval{remove_const :HOSTNAMEFILE} if defined?(HOSTNAMEFILE)
+		HOSTNAMEFILE = File.open("#{HOSTNAMEOUTFILE}", "w")
+    	HOSTNAMEFILE.write("---\n")
+    	HOSTNAMEFILE.write("title: \"Alle Fundstücke nach Website (Seite #{hostnamepagecount} von #{hostnamepagenum})\"\n")
+    	HOSTNAMEFILE.write("created_at: #{Date.today.to_s}\n")
+    	HOSTNAMEFILE.write("author: Christoph Leygraf\n")
+    	HOSTNAMEFILE.write("---\n")
+    	HOSTNAMEFILE.write("\n")
+    	HOSTNAMEFILE.write("<ul>\n")
+    end
+	linksbyhostname[host].keys.map do |ts,w|
+		if lasthostname != host
+			HOSTNAMEFILE.write("</ul>\n") if lasthostname != ""
+			HOSTNAMEFILE.write("<li>#{host}</li>\n<ul>\n")
+		end
+		HOSTNAMEFILE.write("<li><a href='#{tweets[ts]['URL']}'>#{tweets[ts]['TEXT']}</a></li>\n")
+		hostnamelinecount += 1
+	end
+end
 
