@@ -188,7 +188,8 @@ linksbyhostname.keys.sort.map do |host,v|
         end
 		if lasthostname != host
 			HOSTNAMEFILE.write("</ul>\n") if lasthostname != ""
-			HOSTNAMEFILE.write("<li>#{host}</li>\n<ul>\n")
+			HOSTNAMEFILE.write("<li><a href='http://#{host}'>#{host}</a></li>\n<ul>\n")
+            hostnamelinecount += 1
 		end
 		HOSTNAMEFILE.write("<li><a href='#{tweets[ts]['URL']}'>#{tweets[ts]['TEXT']}</a></li>\n")
 		lasthostname = host
