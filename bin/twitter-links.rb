@@ -156,36 +156,36 @@ hostnamepagecount = 0
 hostnamelinenum = linksbyhostname.size + tweets.size
 hostnamepagenum = (hostnamelinenum / linksperpage.to_f).ceil
 linksbyhostname.keys.sort.map do |host,v|
-    if hostnamelinecount == 0 then
-    	if hostnamepagecount != 0 then
-		HOSTNAMEFILE.write("</ul>\n")
-        	HOSTNAMEFILE.write("<div class=\"hnavigation\"><ul>\n")
-		# c = pagenum
-		# begin
-		# 	if c == allpagecount then
-		#         HOSTNAMEFILE.write("&nbsp<li>#{c}</li>\n")
-		# 	else
-		# 	    HOSTNAMEFILE.write("&nbsp<li><a href='/generated/alle_fundstuecke-#{c}/'>#{c}</a></li>\n")
-		# 	end
-		#     c -= 1
-		# end until c == 0
-		HOSTNAMEFILE.write("</div></ul>\n")
-		HOSTNAMEFILE.close unless HOSTNAMEFILE == nil
-	end
-        hostnamepagecount += 1
-    	Object.class_eval{remove_const :HOSTNAMEOUTFILE} if defined?(HOSTNAMEOUTFILE)
-	HOSTNAMEOUTFILE = "#{File.expand_path File.dirname(__FILE__)}/../content/generated/fundstuecke-website-#{hostnamepagecount}.html"
-	Object.class_eval{remove_const :HOSTNAMEFILE} if defined?(HOSTNAMEFILE)
-	HOSTNAMEFILE = File.open("#{HOSTNAMEOUTFILE}", "w")
-    	HOSTNAMEFILE.write("---\n")
-    	HOSTNAMEFILE.write("title: \"Alle Fundstücke nach Website (Seite #{hostnamepagecount} von #{hostnamepagenum})\"\n")
-    	HOSTNAMEFILE.write("created_at: #{Date.today.to_s} #{Time.now.to_s}\n")
-    	HOSTNAMEFILE.write("author: Christoph Leygraf\n")
-    	HOSTNAMEFILE.write("---\n")
-    	HOSTNAMEFILE.write("\n")
-    	HOSTNAMEFILE.write("<ul>\n")
-    end
 	linksbyhostname[host].keys.map do |ts,w|
+        if hostnamelinecount == 0 then
+            if hostnamepagecount != 0 then
+    		HOSTNAMEFILE.write("</ul>\n")
+            	HOSTNAMEFILE.write("<div class=\"hnavigation\"><ul>\n")
+    		# c = pagenum
+    		# begin
+    		# 	if c == allpagecount then
+    		#         HOSTNAMEFILE.write("&nbsp<li>#{c}</li>\n")
+    		# 	else
+    		# 	    HOSTNAMEFILE.write("&nbsp<li><a href='/generated/alle_fundstuecke-#{c}/'>#{c}</a></li>\n")
+    		# 	end
+    		#     c -= 1
+    		# end until c == 0
+    		HOSTNAMEFILE.write("</ul></div>\n")
+    		HOSTNAMEFILE.close unless HOSTNAMEFILE == nil
+    	end
+            hostnamepagecount += 1
+        	Object.class_eval{remove_const :HOSTNAMEOUTFILE} if defined?(HOSTNAMEOUTFILE)
+    	HOSTNAMEOUTFILE = "#{File.expand_path File.dirname(__FILE__)}/../content/generated/fundstuecke-website-#{hostnamepagecount}.html"
+    	Object.class_eval{remove_const :HOSTNAMEFILE} if defined?(HOSTNAMEFILE)
+    	HOSTNAMEFILE = File.open("#{HOSTNAMEOUTFILE}", "w")
+        	HOSTNAMEFILE.write("---\n")
+        	HOSTNAMEFILE.write("title: \"Alle Fundstücke nach Website (Seite #{hostnamepagecount} von #{hostnamepagenum})\"\n")
+        	HOSTNAMEFILE.write("created_at: #{Date.today.to_s} #{Time.now.to_s}\n")
+        	HOSTNAMEFILE.write("author: Christoph Leygraf\n")
+        	HOSTNAMEFILE.write("---\n")
+        	HOSTNAMEFILE.write("\n")
+        	HOSTNAMEFILE.write("<ul>\n")
+        end
 		if lasthostname != host
 			HOSTNAMEFILE.write("</ul>\n") if lasthostname != ""
 			HOSTNAMEFILE.write("<li>#{host}</li>\n<ul>\n")
@@ -193,6 +193,11 @@ linksbyhostname.keys.sort.map do |host,v|
 		HOSTNAMEFILE.write("<li><a href='#{tweets[ts]['URL']}'>#{tweets[ts]['TEXT']}</a></li>\n")
 		lasthostname = host
 		hostnamelinecount += 1
+        if hostnamelinecount >= linksperpage
+            HOSTNAMEFILE.write("</ul>\n")
+            lasthostname = ""
+            hostnamelinecount = 0
+        end
 	end
 end
 
