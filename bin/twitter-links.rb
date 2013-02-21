@@ -53,6 +53,7 @@ FasterCSV.foreach("#{twitterlinks}", :quote_char => '"', :col_sep =>',', :row_se
 					linksbytag["#{tag}"]["#{timestamp}"] = "#{linktext}: #{linkurl}"
 					taggedlinksnum += 1
 				end
+				linktext = linktext.gsub(/(#[A-Za-z0-9]+)/, '')
 				tweets["#{timestamp}"] = Hash[]
 				tweets["#{timestamp}"]["URL"] = "#{linkurl}"
 				tweets["#{timestamp}"]["TEXT"] = "#{linktext}"
