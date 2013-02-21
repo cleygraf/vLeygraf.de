@@ -3,3 +3,5 @@ output
 tmp
 content/generated
 .c9revisions/
+*.sw?
+*~
