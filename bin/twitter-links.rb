@@ -49,8 +49,8 @@ FasterCSV.foreach("#{twitterlinks}", :quote_char => '"', :col_sep =>',', :row_se
 					linkurl = unshorturls["#{linkshorturl}"]
 				end
 				linktext.scan(/#([A-Za-z0-9]+)/).flatten.each do | tag | 
-					linksbytag["#{tag}"] = Hash[] if ! linksbytag["#{tag}"]
-					linksbytag["#{tag}"]["#{timestamp}"] = "#{linktext}: #{linkurl}"
+					linksbytag["#{tag.downcase}"] = Hash[] if ! linksbytag["#{tag.downcase}"]
+					linksbytag["#{tag.downcase}"]["#{timestamp}"] = "#{linktext}: #{linkurl}"
 					taggedlinksnum += 1
 				end
 				linktext = linktext.gsub(/(#[A-Za-z0-9]+)/, '')
@@ -84,6 +84,7 @@ pagenum = (linknum / linksperpage.to_f).ceil
 tweets.keys.sort.reverse.map do |ts,t|
 	if ts =~ /\A(\d\d\d\d)-(\d\d)-(\d\d)/ then
 		tsdate = "#{$3}.#{$2}.#{$1}"
+		ds = "#{$1}-#{$2}-#{$3}"
 	else
 		next
 	end
@@ -127,7 +128,7 @@ tweets.keys.sort.reverse.map do |ts,t|
 			DAILYFILE.close unless DAILYFILE == nil
 		end
 		Object.class_eval{remove_const :DAILYOUTFILE} if defined?(DAILYOUTFILE)
-		DAILYOUTFILE = "#{File.expand_path File.dirname(__FILE__)}/../content/generated/fundstuecke_#{tsdate}.html"
+		DAILYOUTFILE = "#{File.expand_path File.dirname(__FILE__)}/../content/generated/fundstuecke_#{ds}.html"
 		Object.class_eval{remove_const :DAILYFILE} if defined?(DAILYFILE)
 		DAILYFILE = File.open("#{DAILYOUTFILE}", "w")
 		DAILYFILE.write("---\n")
