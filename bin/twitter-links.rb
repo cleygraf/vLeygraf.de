@@ -276,7 +276,7 @@ linksbytag.keys.sort_by { |tag| -linksbytag[tag].size}.each do |tag|
         end
 		if lasttag != tag
 			TAGFILE.write("</ul>\n") if lasttag != ""
-			TAGFILE.write("<li><a href='http://#{tag}'>#{tag}</a></li>\n<ul>\n")
+			TAGFILE.write("<li>#{tag}</li>\n<ul>\n")
             		taglinecount += 1
 		end
 		TAGFILE.write("<li><a href='#{tweets[ts]['URL']}'>#{tweets[ts]['TEXT']}</a></li>\n")
